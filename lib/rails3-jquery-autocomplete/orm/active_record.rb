@@ -9,6 +9,7 @@ module Rails3JQueryAutocomplete
       end
 
       def get_autocomplete_items(parameters)
+        1/0
         model   = parameters[:model]
         term    = parameters[:term]
         search_extra_params = parameters[:search_extra_params]
