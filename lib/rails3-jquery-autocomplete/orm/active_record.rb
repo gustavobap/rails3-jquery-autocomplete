@@ -9,13 +9,13 @@ module Rails3JQueryAutocomplete
       end
 
       def get_autocomplete_items(parameters)
-        1/0
         model   = parameters[:model]
         term    = parameters[:term]
         search_extra_params = parameters[:search_extra_params]
         method  = parameters[:method]
         options = parameters[:options]
         scopes  = Array(options[:scopes])
+        search_method = options[:search_method]
         where   = options[:where]
         limit   = get_autocomplete_limit(options)
         order   = get_autocomplete_order(method, options, model)
@@ -26,8 +26,15 @@ module Rails3JQueryAutocomplete
         scopes.each { |scope| items = items.send(scope, term, search_extra_params) } unless scopes.empty?
 
         items = items.select(get_autocomplete_select_clause(model, method, options)) unless options[:full_model]
-        items = items.where(get_autocomplete_where_clause(model, term, method, options)).
-            limit(limit).order(order)
+        
+        if(search_method)
+          items = items.send(search_method, term, search_extra_params)
+        else
+          items = items.where(get_autocomplete_where_clause(model, term, method, options))
+        end
+        
+        items = items.limit(limit).order(order)
+        
         items = items.where(where) unless where.blank?
 
         puts items.to_sql
