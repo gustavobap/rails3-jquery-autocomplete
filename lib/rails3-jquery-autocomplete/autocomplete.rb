@@ -42,7 +42,11 @@ module Rails3JQueryAutocomplete
     #
     module ClassMethods
       def autocomplete(object, method, options = {})
-        define_method("autocomplete_#{object}_#{method}") do
+        suffix = options[:controller_method_suffix]
+        unless(suffix)
+          suffix = ''
+        end
+        define_method("autocomplete_#{object}_#{method}suffix") do
 
           method = options[:column_name] if options.has_key?(:column_name)
 
