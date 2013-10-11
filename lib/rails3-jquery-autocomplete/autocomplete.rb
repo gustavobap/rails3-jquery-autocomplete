@@ -42,7 +42,7 @@ module Rails3JQueryAutocomplete
     #
     module ClassMethods
       def autocomplete(object, method, options = {})
-        suffix = "_{options[:controller_method_suffix]}"
+        suffix = "_#{options[:controller_method_suffix]}"
         unless(suffix)
           suffix = ''
         end
